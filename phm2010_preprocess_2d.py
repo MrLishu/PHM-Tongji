@@ -13,7 +13,7 @@ num_para = 1
 
 def cwt_demo(data, wavename, sampling_rate, totalscale):
     """
-    :param data: shape [numbers, length, channels] [100, 2014, 1]
+    :param data: shape [numbers, length, channels] [100, 1024, 1]
     :param wavename:
     :param sampling_rate: 5000
     :param totalscale: 256 or 512
@@ -108,12 +108,14 @@ def get_labels(path_with_f_name, name):
     y = np.concatenate((y1, y2, y3), axis=1)
     data = np.mean(y, 1)
 
-    print(name, 'labels', data.shape)   #
+    print(name, 'labels', data.shape)
 
     np.save(r'data\2d_' + str(num_para) + 'C' + str(length_para) + '_data_' + str(name) + '_labels.npy', data)
     # np.save(r'E:\data\1d_intervals_' + str(length_para) + '_data_' + str(name) + '_labels.npy', data)
 
 proprecessing(path=r'data\c1', name='c1', length_para=length_para, num_para=num_para)
+
+
 # proprecessing(path=r'E:\data\c4', name='c4', length_para=length_para, num_para=num_para)
 # proprecessing(path=r'E:\data\c6', name='c6', length_para=length_para, num_para=num_para)
 #
