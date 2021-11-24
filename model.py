@@ -1,0 +1,2 @@
+class Net:
+    pass

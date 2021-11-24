@@ -2,55 +2,44 @@ import numpy as np
 import pandas as pd
 import pywt
 import scipy.io
-from scipy.ndimage.interpolation import zoom
 
 from utils import *
 
 
 
+print('Loading data (.mat file)...')
 mat_file = r'data/mill/mill.mat'
 mat = scipy.io.loadmat(mat_file)
 mat = mat['mill'][0]
 
-column_names = ['case', 'run', 'VB', 'time', 'DOC', 'feed', 'material', 'smcAC', 'smcDC', 'vib_table', 'vib_spindle', 'AE_table', 'AE_spindle']
+condition_name = ['case', 'run', 'VB', 'time', 'DOC', 'feed', 'material'] 
+signal_name = ['smcAC', 'smcDC', 'vib_table', 'vib_spindle', 'AE_table', 'AE_spindle']
 
-print('Loading data (.mat file)...')
-dataset = []
-for row in mat:
-    df = pd.DataFrame(columns=column_names)
-    sample_number = len(row[-1])
-    for i, data in enumerate(row):
-        if len(data) > 1:
-            df[column_names[i]] = data.flatten()
-        else:
-            df[column_names[i]] = np.repeat(data.flatten(), sample_number)
-    dataset.append(df)
+condition_data = np.array(mat[condition_name].tolist()).squeeze()
+condition_dataset = pd.DataFrame(condition_data, columns=condition_name)
+signal_dataset = [pd.DataFrame(np.array(data).squeeze().T, columns=signal_name) for data in mat[signal_name].tolist()]
 print('Data loading completed.')
-print('Info of the first dataframe:')
-print(dataset[0].info())
+print('Info of the condition dataset and the first signal dataframe:')
+print(condition_dataset.info())
+print(signal_dataset[0].info())
 
 totalscale = 256
 wavename = 'morl'
 sampling_rate = 250
+resample_number = 1024
 resize_size = 224
 
 fc = pywt.central_frequency(wavename)
 cparam = 2 * fc * totalscale
-scales = cparam / np.arange(totalscale, 1, -1)
+scales = cparam / np.arange(totalscale, 0, -1)
 
 print('Preprocessing data...')
-
-processed_dataset = []
-for i, df in enumerate(dataset):
-    processed_data = np.empty((6, resize_size, resize_size))
-    for j, column_name in enumerate(df.columns[-6:]):
-        signal = df[column_name]
-        signal = signal[(len(signal) - 1024) // 2:(len(signal) + 1024) // 2]
-        cwtmatr, frequencies = pywt.cwt(signal, scales, wavename, 1 / sampling_rate)
-
-        resized = scipy.ndimage.zoom(cwtmatr, (resize_size / cwtmatr.shape[0], resize_size / cwtmatr.shape[1]), order = 3)
-        processed_data[j] = resized
-
-    print(f'\rContinuous wavelet transform... ({i}/{len(dataset)})', end='')
-    processed_dataset.append(processed_data)
-print(f'\rContinuous wavelet transform completed.')
+cwt_dataset = np.empty((len(signal_dataset), len(signal_name), totalscale, resample_number))
+for i, df in enumerate(signal_dataset):
+    data = df.to_numpy().T
+    sample_number = data.shape[1]
+    data = data[:, (sample_number - resample_number) // 2:(sample_number + resample_number) // 2]
+    cwtmatr, frequencies = pywt.cwt(data, scales, wavename, 1 / sampling_rate)
+    cwt_dataset[i] = cwtmatr.transpose(1, 0, 2)
+    print(f'\rContinuous wavelet transform... ({i}/{len(signal_dataset)})', end='')
+print(f'\nContinuous wavelet transform completed.')

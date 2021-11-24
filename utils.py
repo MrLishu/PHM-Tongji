@@ -1,14 +1,6 @@
-import os
-import scipy.signal as signal
 import numpy as np
-import pandas as pd
-from sklearn import preprocessing
-import pywt
-import scipy
-import scipy.io
-from scipy.ndimage.interpolation import zoom
-from scipy.fftpack import fft
 import matplotlib.pyplot as plt
+
 
 
 def plot_cwt(sampling_rate, signal, cwtmatr, frequencies):
