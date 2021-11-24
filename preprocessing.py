@@ -3,8 +3,6 @@ import pandas as pd
 import pywt
 import scipy.io
 
-from utils import *
-
 
 
 print('Loading data (.mat file)...')
