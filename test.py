@@ -8,7 +8,7 @@ from utils import *
 
 
 data_directory = r'data/c1'
-dataframe_number = 3  # max=315
+dataframe_number = 315  # max=315
 signal_name = ['Fx', 'Fy', 'Fz', 'Ax', 'Ay', 'Az', 'AE_rms']
 sampling_rate = 5000
 
@@ -46,6 +46,6 @@ print(f'\nContinuous wavelet transform completed.')
 
 label_path = r'data/c1_wear.csv'
 label_dataset = pd.read_csv((label_path))
-print(label_dataset.info())
-
 label_dataset = label_dataset.to_numpy()
+
+exit()
