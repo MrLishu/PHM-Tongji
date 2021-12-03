@@ -2,15 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pywt
 
-data_x4 = np.load(r"/Users/leo/Desktop/1d_1C4096_data_c4.npy")
+data_x4 = np.load(r"1d_1C1024_data_c1.npy")
 k=data_x4[1]
 print(k.shape)
 num=k.T
 data = num[5].T
 
-
-
-sampling_rate = 4096#采样频率
+sampling_rate = 1024#采样频率
 t = np.arange(0,1.0,1.0/sampling_rate)  #0-1.0之间的数，步长为1.0/sampling_rate
 f1 = 100#频率
 f2 = 200
@@ -34,7 +32,3 @@ plt.ylabel(u"freq(Hz)")
 plt.xlabel(u"time(s)")
 plt.subplots_adjust(hspace=0.4) #调整边距和子图的间距 hspace为子图之间的空间保留的高度，平均轴高度的一部分
 plt.show()
-
-
-
-

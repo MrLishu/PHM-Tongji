@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 
-def plot_cwt(sampling_rate, signal, cwtmatr, frequencies):
+def plotCwt(sampling_rate, signal, cwtmatr, frequencies):
     t = np.arange(len(signal)) / sampling_rate
     plt.figure(figsize=(8, 4))
     plt.subplot(211)
@@ -16,3 +16,10 @@ def plot_cwt(sampling_rate, signal, cwtmatr, frequencies):
     plt.xlabel(u"time(s)")
     plt.subplots_adjust(hspace=0.4)
     plt.show()
+
+def plotSignal(signal, sampling_rate=1):
+    t = np.arange(len(signal)) / sampling_rate
+    plt.figure(figsize=(8, 4))
+    plt.plot(t, signal)
+    plt.xlabel(u"time(s)")
+    plt.title(u"Signal")
