@@ -36,7 +36,7 @@ def cwt(resample_dataset, sampling_rate, totalscale=256, wavename='morl', save=F
     print(f'\nContinuous wavelet transform completed.')
 
     if save:
-        np.save(save_filepath, resample_dataset)
+        np.save(save_filepath, cwt_dataset)
         print(f'Data saved at {save_filepath}')
 
     return cwt_dataset
